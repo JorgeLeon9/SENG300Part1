@@ -44,13 +44,13 @@ public class testDeclaration {
 		unit.accept(new ASTVisitor(){
 		
 			
-			public boolean visit(VariableDeclarationFragment node){
+			public boolean visit(VariableDeclarationStatement node){
 				SimpleName name = node.getName();
-				int lineNumber = unit.getLineNumber(name.getStartPosition());
+				//System.out.println(node.getType());
+				//int lineNumber = unit.getLineNumber(name.getStartPosition());
 				declarations.add(name.toString());
 				
 				System.out.println(declarations);
-				//System.out.println("Line number: " + lineNumber);
 				return false;
 			}
 		
