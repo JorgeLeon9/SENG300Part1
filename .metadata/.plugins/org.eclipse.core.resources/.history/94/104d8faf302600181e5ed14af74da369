@@ -10,7 +10,7 @@ public class testDeclaration2 {
     for (int i = 0; i < javaFiles.length; i++) {
 	     if (javaFiles[i].isFile()) {
 	    	 System.out.println("File " + javaFiles[i].getName());
-	    	 } //dont need the directory part
+	    	 }
 	    }
 }}
 }
