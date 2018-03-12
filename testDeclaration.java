@@ -52,6 +52,7 @@ public class testDeclaration {
 	}
 		//Parses the file 
 		
+		List<String> declarations = new ArrayList();
 		for (int i = 0; i < listOfFiles.length; i++){
 		String filePath = listOfFiles[i].getName();
 		System.out.println(filePath);
@@ -59,8 +60,6 @@ public class testDeclaration {
 		char[] fileContent = getFile(filePath).toCharArray();
 		parser.setSource(fileContent);
 		CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-		
-		List<String> declarations = new ArrayList();
 		
 		unit.accept(new ASTVisitor(){
 		
@@ -73,7 +72,6 @@ public class testDeclaration {
 				//System.out.println("Line number: " + lineNumber);
 				return false;
 			}
-		
 		});
 		//Puts the declarations of every variable into a Hashset and counts the frequency of each one
 		Set<String> uniqueSet = new HashSet<String>(declarations);
