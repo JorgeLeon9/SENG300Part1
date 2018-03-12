@@ -9,14 +9,18 @@ public class testDeclaration2 {
 	File[] allFiles = filePath.listFiles();{
     for (int i = 0; i < allFiles.length; i++) {
 	     if (allFiles[i].isFile()) {
+	    	 //for (int j = 0; i < allFiles.length; j++){
 	    		 String fileToCheck = allFiles[i].getName();
 	    		 String isJava = fileToCheck.substring(fileToCheck.lastIndexOf("."));
-	    		 if(isJava.equals(".java")){
-	    			 //Could replace the print with code that puts the file into a list
+	    		 //to test if it is .java in the end
+	    		 System.out.println(isJava);
+	    		 //current bug: I print isjava, it is ".java" but the if statement is not true.
+	    		 if(isJava == ".java"){
 	    			 System.out.println("File " + allFiles[i].getName());
 	    		 } else {
 	    			 System.out.println("false");
 	    		 }
+	    	 //}
 	     }
 	    }
 }}

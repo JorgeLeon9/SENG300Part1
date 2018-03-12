@@ -12,7 +12,6 @@ public class testDeclaration2 {
 	    		 String fileToCheck = allFiles[i].getName();
 	    		 String isJava = fileToCheck.substring(fileToCheck.lastIndexOf("."));
 	    		 if(isJava.equals(".java")){
-	    			 //Could replace the print with code that puts the file into a list
 	    			 System.out.println("File " + allFiles[i].getName());
 	    		 } else {
 	    			 System.out.println("false");
