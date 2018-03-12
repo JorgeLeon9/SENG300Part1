@@ -1,0 +1,19 @@
+package test;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+
+public class testDeclaration2 {
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+	File folder = new File("C:/Users/jason/Documents/School/University of Calgary/SENG 300 iteration 1/Iteration1/src/test");
+	File[] listOfFiles = folder.listFiles();{
+    for (int i = 0; i < listOfFiles.length; i++) {
+	     if (listOfFiles[i].isFile()) {
+	    	 System.out.println("File " + listOfFiles[i].getName());
+	    	 } else if (listOfFiles[i].isDirectory()) {
+	    		 System.out.println("Directory " + listOfFiles[i].getName());
+	    	 }
+	    }
+}}
+}
