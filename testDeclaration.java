@@ -15,7 +15,10 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class testDeclaration {
 
@@ -67,10 +70,10 @@ public class testDeclaration {
 		unit.accept(new ASTVisitor(){
 		
 			//Gets the name of each variable and adds it to a list
-			public boolean visit(VariableDeclarationFragment node){
-				SimpleName name = node.getName();
+			public boolean visit(VariableDeclarationStatement node){
+				Type type = node.getType();
 				//int lineNumber = unit.getLineNumber(name.getStartPosition());
-				declarations.add(name.toString());
+				declarations.add(type.toString());
 				System.out.println(declarations);
 				//System.out.println("Line number: " + lineNumber);
 				return false;
