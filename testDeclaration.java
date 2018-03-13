@@ -40,27 +40,30 @@ public class testDeclaration {
 	public static void main(String[] args) throws FileNotFoundException, IOException {
 		
 		//declare a specific directory and puts the names of files in a list
-		File folder = new File("/Users/parkerwong/Documents/workspace/TestAstParser/src/test");
-		File[] listOfFiles = folder.listFiles();{
-	    for (int i = 0; i < listOfFiles.length; i++) {
-		     if (listOfFiles[i].isFile()) {
-		    	 System.out.println("File " + listOfFiles[i].getName());
-		    	 } else if (listOfFiles[i].isDirectory()) {
-		    		 System.out.println("Directory " + listOfFiles[i].getName());
+		File filepath = new File("/Users/parkerwong/Documents/workspace/TestAstParser/src/test");
+		File[] allFiles = filepath.listFiles();{
+	    for (int i = 0; i < allFiles.length; i++) {
+		     if (allFiles[i].isFile()) {
+		    	 String fileToCheck = allFiles[i].getName();
+		    	 String isJava = fileToCheck.substring(fileToCheck.lastIndexOf("."));
+		    	 if(isJava.equals(".java")){
+		    		 System.out.println("File " + allFiles[i].getName());
+		    	 }
+		    	 } else if (allFiles[i].isDirectory()) {
+		    		 System.out.println("No .java files found");
 		    	 }
 		    }
 	}
 		//Parses the file 
-		
 		List<String> declarations = new ArrayList();
-		for (int i = 0; i < listOfFiles.length; i++){
-		String filePath = listOfFiles[i].getName();
+		for (int i = 0; i < allFiles.length; i++){
+		String filePath = allFiles[i].getName();
 		System.out.println(filePath);
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		char[] fileContent = getFile(filePath).toCharArray();
 		parser.setSource(fileContent);
 		CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-		
+						
 		unit.accept(new ASTVisitor(){
 		
 			//Gets the name of each variable and adds it to a list
@@ -68,10 +71,11 @@ public class testDeclaration {
 				SimpleName name = node.getName();
 				//int lineNumber = unit.getLineNumber(name.getStartPosition());
 				declarations.add(name.toString());
-				//System.out.println(declarations);
+				System.out.println(declarations);
 				//System.out.println("Line number: " + lineNumber);
 				return false;
 			}
+		
 		});
 		//Puts the declarations of every variable into a Hashset and counts the frequency of each one
 		Set<String> uniqueSet = new HashSet<String>(declarations);
