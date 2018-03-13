@@ -1,5 +1,6 @@
 package test;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,11 +15,17 @@ import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.SimpleName;
+import org.eclipse.jdt.core.dom.SimpleType;
+import org.eclipse.jdt.core.dom.Type;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
+import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 
 public class testDeclaration {
 
-	
+	/* The getFile method takes in a String parameter and declares a newBufferedReader and 
+	 * StringBuilder to read .java files
+	 */
 	public static String getFile(String filePath) throws FileNotFoundException, IOException{
 		BufferedReader read = new BufferedReader(new FileReader(filePath));
 		StringBuilder build = new StringBuilder();
@@ -35,30 +42,67 @@ public class testDeclaration {
 	
 	
 	public static void main(String[] args) throws FileNotFoundException, IOException {
-		String filePath = "test.java";
+		
+		//declare a specific directory and puts the names of files in a list
+		File filepath = new File("/Users/parkerwong/Documents/workspace/TestAstParser/src/test");
+		File[] allFiles = filepath.listFiles();{
+	    for (int i = 0; i < allFiles.length; i++) {
+		     if (allFiles[i].isFile()) {
+		    	 String fileToCheck = allFiles[i].getName();
+		    	 String isJava = fileToCheck.substring(fileToCheck.lastIndexOf("."));
+		    	 if(isJava.equals(".java")){
+		    		 System.out.println("File " + allFiles[i].getName());
+		    	 }
+		    	 } else if (allFiles[i].isDirectory()) {
+		    		 System.out.println("No .java files found");
+		    	 }
+		    }
+	}
+		//Parses the file 
+		List<String> declarations = new ArrayList();
+		List<String> references = new ArrayList();
+		for (int i = 0; i < allFiles.length; i++){
+		String filePath = allFiles[i].getName();
+		System.out.println(filePath);
 		ASTParser parser = ASTParser.newParser(AST.JLS8);
 		char[] fileContent = getFile(filePath).toCharArray();
 		parser.setSource(fileContent);
+		parser.setResolveBindings(true);
+		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+		parser.setBindingsRecovery(true);
 		CompilationUnit unit = (CompilationUnit) parser.createAST(null);
-		List<String> declarations = new ArrayList();
+						
 		unit.accept(new ASTVisitor(){
 		
-			
+			//Gets the name of each variable and adds it to a list
 			public boolean visit(VariableDeclarationStatement node){
-				SimpleName name = node.getName();
-				//System.out.println(node.getType());
+				Type type = node.getType();
 				//int lineNumber = unit.getLineNumber(name.getStartPosition());
-				declarations.add(name.toString());
-				
+				declarations.add(type.toString());
 				System.out.println(declarations);
+				//System.out.println("Line number: " + lineNumber);
 				return false;
 			}
-		
 		});
+		
+		unit.accept(new ASTVisitor(){
+				public boolean visit(TypeDeclaration node){
+				String type = node.getName().getFullyQualifiedName();
+				//int lineNumber = unit.getLineNumber(name.getStartPosition());
+				references.add(type.toString());
+				System.out.println(references);
+				//System.out.println("Line number: " + lineNumber);
+				return false;
+		}});
+		//Puts the declarations of every type and class reference into a Hashset and counts the frequency of each one
 		Set<String> uniqueSet = new HashSet<String>(declarations);
 		for (String type : uniqueSet) {
 			System.out.println(type + " Declarations found: " + Collections.frequency(declarations, type));	
+		}
+		Set<String> uniqueSet1 = new HashSet<String>(references);
+		for (String type : uniqueSet1) {
+			System.out.println(type + " References found: " + Collections.frequency(references, type));	
 	
 		}
-	}
+	}}
 }
